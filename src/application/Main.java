@@ -1,6 +1,7 @@
 package application;
 
 import java.io.File;
+import java.util.*;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -38,6 +39,7 @@ public class Main extends Application {
 	
 	String labelRank[] = { "run ", "swim", "walk", "eat ", "play" }; // ProbabilityBarのランク5位まで
 	String parcentRank[] = { "56", "32", "10", "8 ", "4 " }; // ProbabilityBarのランク5位まで
+	int verticalItemSize = 5;
 
 
 	@Override
@@ -56,8 +58,7 @@ public class Main extends Application {
 			// 動画再生クラスをインスタンス化
 			Label videoLabel = new Label("This is the Title of this Movie");
 			videoLabel.setFont(new Font("Arial", 30));
-			mediaPlayer.getChildren().addAll(videoLabel);
-
+			mediaPlayer.getChildren().addAll(videoLabel);//VBox型のmediaPlayerにvideoLabelを追加
 			VBox media = new VBox();
 			// videoLabel.setStyle("-fx-background-color: red"); //check用
 			Media Video = new Media(f.toURI().toString());
@@ -82,104 +83,37 @@ public class Main extends Application {
 
 			VBox bottomNode = new VBox(20);
 			bottomNode.setAlignment(Pos.CENTER);
-			HBox barNode0 = new HBox(20);
-			HBox barNode1 = new HBox(20);
-			HBox barNode2 = new HBox(20);
-			HBox barNode3 = new HBox(20);
-			HBox barNode4 = new HBox(20);
+			List<HBox> barNodes = new ArrayList<HBox>();
+			List<ProgressBar> probabilityBars = new ArrayList<ProgressBar>();
+			List<Label> lblMsgs = new ArrayList<Label>();
+			List<Label> parcents = new ArrayList<Label>();
+		
+			// Initialize each items
+			for (int i=0;i<verticalItemSize;++i){
+				probabilityBars.add(new ProgressBar());
+				probabilityBars.get(i).setPrefWidth(1000);
+				probabilityBars.get(i).setMaxWidth(1000);
+				probabilityBars.get(i).setPrefHeight(30);
+				probabilityBars.get(i).setProgress(0.0);
+				
+				lblMsgs.add(new Label(labelRank[i]));
+				parcents.add(new Label(parcentRank[i]));
+				
+				barNodes.add(new HBox());
+				barNodes.get(i).setPadding(new Insets(5, 10, 5, 10));
+				barNodes.get(i).setSpacing(20.0);
+				barNodes.get(i).getChildren().add(lblMsgs.get(i));
+				barNodes.get(i).getChildren().add(probabilityBars.get(i));
+				barNodes.get(i).getChildren().add(parcents.get(i));
+				barNodes.get(i).setAlignment(Pos.CENTER);
+				
+				bottomNode.getChildren().add(barNodes.get(i));
+			}
 
-			ProgressBar probabilityBar0 = new ProgressBar();
-			ProgressBar probabilityBar1 = new ProgressBar();
-			ProgressBar probabilityBar2 = new ProgressBar();
-			ProgressBar probabilityBar3 = new ProgressBar();
-			ProgressBar probabilityBar4 = new ProgressBar();
-
-			probabilityBar0.setPrefWidth(1000);
-			probabilityBar0.setMaxWidth(1000);
-			probabilityBar0.setPrefHeight(30);
-			probabilityBar0.setProgress(0.0);
-
-			probabilityBar1.setPrefWidth(1000);
-			probabilityBar1.setMaxWidth(1000);
-			probabilityBar1.setPrefHeight(30);
-			probabilityBar1.setProgress(0.0);
-
-			probabilityBar2.setPrefWidth(1000);
-			probabilityBar2.setMaxWidth(1000);
-			probabilityBar2.setPrefHeight(30);
-			probabilityBar2.setProgress(0.0);
-
-			probabilityBar3.setPrefWidth(1000);
-			probabilityBar3.setMaxWidth(1000);
-			probabilityBar3.setPrefHeight(30);
-			probabilityBar3.setProgress(0.0);
-
-			probabilityBar4.setPrefWidth(1000);
-			probabilityBar4.setMaxWidth(1000);
-			probabilityBar4.setPrefHeight(30);
-			probabilityBar4.setProgress(0.0);
-			
-			Label lblMsg0 = new Label(labelRank[0]);
-			Label parcent0 = new Label(parcentRank[0]);
-			Label lblMsg1 = new Label(labelRank[1]);
-			Label parcent1 = new Label(parcentRank[1]);
-			Label lblMsg2 = new Label(labelRank[2]);
-			Label parcent2 = new Label(parcentRank[2]);
-			Label lblMsg3 = new Label(labelRank[3]);
-			Label parcent3 = new Label(parcentRank[3]);
-			Label lblMsg4 = new Label(labelRank[4]);
-			Label parcent4 = new Label(parcentRank[4]);
-
-			/*
-			 * Label[] lblMsg = new Label[5]; for(int i=0 ; i<5;i++){
-			 * lblMsg[i].setText(labelRank[i]); }
-			 * 
-			 * Label[] parcent = new Label[5]; for(int i=0 ; i<5;i++){
-			 * parcent[i].setText(parcentRank[i]); }
-			 */
-
-			barNode0.setPadding(new Insets(40, 10, 5, 10));
-			barNode0.setSpacing(20.0);
-			barNode0.getChildren().add(lblMsg0);
-			barNode0.getChildren().add(probabilityBar0);
-			barNode0.getChildren().add(parcent0);
-			barNode0.setAlignment(Pos.CENTER);
-
-			barNode1.setPadding(new Insets(5, 10, 5, 10));
-			barNode1.setSpacing(20.0);
-			barNode1.getChildren().add(lblMsg1);
-			barNode1.getChildren().add(probabilityBar1);
-			barNode1.getChildren().add(parcent1);
-			barNode1.setAlignment(Pos.CENTER);
-
-			barNode2.setPadding(new Insets(5, 10, 5, 10));
-			barNode2.setSpacing(20.0);
-			barNode2.getChildren().add(lblMsg2);
-			barNode2.getChildren().add(probabilityBar2);
-			barNode2.getChildren().add(parcent2);
-			barNode2.setAlignment(Pos.CENTER);
-
-			barNode3.setPadding(new Insets(5, 10, 5, 10));
-			barNode3.setSpacing(20.0);
-			barNode3.getChildren().add(lblMsg3);
-			barNode3.getChildren().add(probabilityBar3);
-			barNode3.getChildren().add(parcent3);
-			barNode3.setAlignment(Pos.CENTER);
-
-			barNode4.setPadding(new Insets(5, 10, 5, 10));
-			barNode4.setSpacing(20.0);
-			barNode4.getChildren().add(lblMsg4);
-			barNode4.getChildren().add(probabilityBar4);
-			barNode4.getChildren().add(parcent4);
-			barNode4.setAlignment(Pos.CENTER);
+			barNodes.get(0).setPadding(new Insets(40, 10, 5, 10));
 
 			bottomNode.setPadding(new Insets(5, 10, 5, 10));
 			bottomNode.setSpacing(20.0);
-			bottomNode.getChildren().add(barNode0);
-			bottomNode.getChildren().add(barNode1);
-			bottomNode.getChildren().add(barNode2);
-			bottomNode.getChildren().add(barNode3);
-			bottomNode.getChildren().add(barNode4);
 
 			root.setBottom(bottomNode);
 
